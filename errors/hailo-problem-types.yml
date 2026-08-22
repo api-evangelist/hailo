@@ -1,0 +1,102 @@
+generated: '2026-08-22'
+method: derived
+source: grpc/hailo-media-library-service.proto
+note: >-
+  Derived verbatim from the MediaLibraryStatus enum in grpc/hailo-media-library-service.proto. This is
+  NOT RFC 9457 — there is no application/problem+json, no type URI, no HTTP status mapping. It is a
+  protobuf enum returned in MedialibraryStatusReply alongside a free-text error_message. Titles and
+  remediation notes below are our plain-language reading of each constant plus the RPC block it appears
+  in; where the contract does not say what to do, the remediation says so rather than guessing.
+format: protobuf-enum
+envelope:
+  message: MedialibraryStatusReply
+  fields:
+  - name: status
+    type: MediaLibraryStatus
+  - name: error_message
+    type: string
+    note: Free text, not machine-parseable and not enumerated.
+returned_by: 27 of 33 MediaLibraryService RPCs
+problem_types:
+- code: PROTO_MEDIA_LIBRARY_SUCCESS
+  value: 0
+  title: Success
+  remediation: No action.
+- code: PROTO_MEDIA_LIBRARY_ERROR
+  value: 1
+  title: Unspecified error
+  remediation: >-
+    Catch-all. The only detail is the free-text error_message; there is no sub-code, so an agent cannot
+    branch on this reliably.
+- code: PROTO_MEDIA_LIBRARY_INVALID_ARGUMENT
+  value: 2
+  title: Invalid argument
+  remediation: Client-side fault. Re-check the request message fields; do not retry unchanged.
+- code: PROTO_MEDIA_LIBRARY_CONFIGURATION_ERROR
+  value: 3
+  title: Configuration error
+  remediation: The medialib / profile JSON is invalid or inconsistent. Validate the config before SetProfile.
+- code: PROTO_MEDIA_LIBRARY_BUFFER_ALLOCATION_ERROR
+  value: 4
+  title: Buffer allocation failed
+  remediation: Resource exhaustion on the board (CMA heap). Reduce stream count or resolution; check board-status.
+- code: PROTO_MEDIA_LIBRARY_DSP_OPERATION_ERROR
+  value: 5
+  title: DSP operation failed
+  remediation: Hardware/driver-level failure in the DSP path. Not client-correctable.
+- code: PROTO_MEDIA_LIBRARY_UNINITIALIZED
+  value: 6
+  title: Service not initialized
+  remediation: Call Initialize before any other RPC. Ordering fault, safe to correct and retry.
+- code: PROTO_MEDIA_LIBRARY_OUT_OF_RESOURCES
+  value: 7
+  title: Out of resources
+  remediation: Release held buffers with ReleaseBuffer and unsubscribe unused streams, then retry.
+- code: PROTO_MEDIA_LIBRARY_ENCODER_ENCODE_ERROR
+  value: 8
+  title: Encoder failed to encode
+  remediation: Encoder-path failure. Check encoder configuration for the affected sink.
+- code: PROTO_MEDIA_LIBRARY_ENCODER_COULD_NOT_GET_PHYSICAL_ADDRESS
+  value: 9
+  title: Encoder could not resolve a physical buffer address
+  remediation: DMA buffer sharing failure. Not client-correctable; re-establish the buffer subscription.
+- code: PROTO_MEDIA_LIBRARY_BUFFER_NOT_FOUND
+  value: 10
+  title: Buffer not found
+  remediation: >-
+    The buffer handle passed to ReleaseBuffer or AddBufferToEncoder is unknown — typically already
+    released, or from a closed subscription.
+- code: PROTO_MEDIA_LIBRARY_FREETYPE_ERROR
+  value: 11
+  title: FreeType (text rendering) error
+  remediation: Overlay text rendering failed — usually a missing or unreadable font file in the OSD config.
+- code: PROTO_MEDIA_LIBRARY_PROFILE_IS_RESTRICTED
+  value: 12
+  title: Profile is restricted
+  remediation: >-
+    The requested profile is blocked, normally by thermal auto-restriction. Read GetThrottlingState and
+    GetAutoProfileRestrictionEnabled; a fallback profile can be set with SetRestrictionFallbackProfile.
+- code: PROTO_MEDIA_LIBRARY_PROFILE_VALIDATION_FAILED
+  value: 13
+  title: Profile validation failed
+  remediation: The profile did not pass validation. Correct the profile definition; do not retry unchanged.
+problem_type_count: 14
+state_enums:
+- name: PipelineState
+  values:
+  - PIPELINE_STATE_UNINITIALIZED
+  - PIPELINE_STATE_RUNNING
+  - PIPELINE_STATE_STOPPED
+- name: ThrottlingState
+  values:
+  - THROTTLING_STATE_UNINITIALIZED
+  - THROTTLING_STATE_FULL_PERFORMANCE
+  - THROTTLING_STATE_COOLING
+  - THROTTLING_STATE_S0
+  - THROTTLING_STATE_S1
+  - THROTTLING_STATE_S2
+  - THROTTLING_STATE_S3
+  - THROTTLING_STATE_S4
+  note: >-
+    S0..S4 are progressive thermal restriction steps. The contract does not document what each step
+    restricts, so no meaning is asserted here.

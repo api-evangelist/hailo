@@ -1,0 +1,63 @@
+generated: '2026-08-22'
+method: searched
+source: https://github.com/hailo-ai/hailort/releases
+note: >-
+  Recent window only, read from the GitHub Releases API on 2026-08-22. Hailo's prose changelog is
+  published on the Developer Zone at
+  https://hailo.ai/developer-zone/documentation/hailort/latest/?sp_referrer=changelog/changelog.html
+  (linked from the hailort README); that host answers 403 to our crawler behind a Cloudflare
+  interstitial, so the entries below carry tags and dates but no per-release highlights — we do not
+  summarize a page we could not read.
+scheme: semver
+current_version: v5.4.0
+docs: https://hailo.ai/developer-zone/documentation/hailort/latest/?sp_referrer=changelog/changelog.html
+entries:
+- version: v5.4.0
+  date: '2026-08-16'
+  repositories:
+  - hailort
+  - hailort-drivers
+  - tappas
+  - hailo_model_zoo
+  breaking: unknown
+  highlights: null
+- version: v4.24.0
+  date: '2026-06-25'
+  repositories:
+  - hailort
+  - hailort-drivers
+  breaking: unknown
+  highlights: Hailo-8 family line (hailo8 branch).
+- version: v5.3.0
+  date: '2026-04-05'
+  repositories:
+  - hailort
+  - hailo_model_zoo
+  breaking: unknown
+  highlights: null
+- version: v5.2.0
+  date: '2026-01-08'
+  repositories:
+  - hailort
+  - tappas
+  breaking: unknown
+  highlights: null
+- version: v5.1.1
+  date: '2025-11-09'
+  repositories:
+  - hailort
+  breaking: unknown
+  highlights: null
+- version: v5.1.0
+  date: '2025-09-30'
+  repositories:
+  - hailort
+  breaking: unknown
+  highlights: null
+- version: v1.12.1
+  date: '2026-08-10'
+  repositories:
+  - hailo-media-library
+  breaking: unknown
+  highlights: Media Library / Hailo-15 line, versioned independently of HailoRT.
+entry_count: 7

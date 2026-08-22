@@ -1,23 +1,211 @@
 aid: hailo
 name: Hailo
-description: 'Hailo is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  Hailo Technologies Ltd. is an Israeli fabless semiconductor company, headquartered in Tel Aviv with
+  offices in the United States, Germany, Japan, Taiwan, China and South Korea, that designs AI inference
+  accelerators (the Hailo-8, Hailo-8L and Hailo-10 families) and AI vision processors (the Hailo-15 SoC
+  family) for edge devices. Its developer surface is not a hosted web API: it is an on-device software
+  stack published largely on GitHub under the hailo-ai organization — HailoRT, a C/C++/Python runtime
+  library plus the hailortcli command line tool and a PCIe kernel driver; the Hailo Model Zoo of
+  pre-compiled HEF models; TAPPAS and hailo-apps application pipelines; and the Hailo Media Library and
+  Hailo Imaging stacks for the Hailo-15 vision processor. The machine-readable contracts Hailo publishes
+  are Protocol Buffers — a 33-RPC gRPC MediaLibraryService, the HailoRT hRPC and GenAI message schemes,
+  the HEF model-file format, and a WebSocket/ZMQ analytics metadata scheme. Hailo also publishes a
+  first-party Agent Skills package (hailo15-agentic-coding) of twelve skills that drive board connection,
+  pipeline editing, model swapping, cross-compilation and deployment on the Hailo-15 SBC.
+image: https://avatars.githubusercontent.com/u/83159046?v=4
 url: https://raw.githubusercontent.com/api-evangelist/hailo/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-22'
 modified: '2026-08-22'
 tags:
-- Company
-apis: []
+- Artificial Intelligence
+- Machine Learning
+- Semiconductors
+- Edge Computing
+- Computer Vision
+- Inference
+- Embedded Systems
+- Video Analytics
+- Hardware
+- Generative AI
+- Protocol Buffers
+- gRPC
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: hailo-hailort
+  name: HailoRT
+  description: >-
+    HailoRT is Hailo's production runtime library for the Hailo-8, Hailo-10 and Hailo-15 device families.
+    It is a host-side, user-space C/C++ library with a Python binding (pyHailoRT), a hailortcli command
+    line tool, a GStreamer element (hailonet) and a PCIe kernel driver. It is a local device API rather
+    than a network API — there is no hosted HTTP base URL. The machine-readable contracts it publishes are
+    Protocol Buffers definitions in the hailo-ai/hailort repository: the hRPC client/server request and
+    reply scheme, the GenAI (LLM / VLM / speech / embeddings) request scheme, the HEF compiled-model file
+    format, and the scheduler-monitor and tracer-profiler telemetry schemes.
+  humanURL: https://hailo.ai/developer-zone/documentation/hailort/latest/
+  x-base-url: none
+  x-base-url-note: >-
+    Deliberately no baseURL. HailoRT is a host-side library that talks to the accelerator over PCIe or
+    USB through a kernel driver. There is no HTTP host to record, and repair-api-bases.py confirmed on
+    2026-08-22 that no source names one. Recorded as absent rather than guessed from the domain.
+  tags:
+  - Inference
+  - Runtime
+  - Edge Computing
+  - Protocol Buffers
+  properties:
+  - type: Protobuf
+    url: grpc/hailo-hailort-hrpc.proto
+  - type: Protobuf
+    url: grpc/hailo-hailort-genai.proto
+  - type: Protobuf
+    url: grpc/hailo-hef.proto
+  - type: Protobuf
+    url: grpc/hailo-scheduler-monitor.proto
+  - type: Protobuf
+    url: grpc/hailo-tracer-profiler.proto
+  - type: SourceCode
+    url: https://github.com/hailo-ai/hailort
+  - type: Documentation
+    url: https://hailo.ai/developer-zone/documentation/hailort/latest/
+  - type: CLI
+    url: cli/hailo-cli.yml
+- aid: hailo-media-library
+  name: Hailo Media Library Service
+  description: >-
+    The Hailo Media Library is the C++ media and vision stack for the Hailo-15 AI vision processor. It
+    exposes a real gRPC contract — service MediaLibraryService, 33 RPCs including five server-streaming
+    subscriptions — covering pipeline lifecycle (Initialize, StartPipeline, StopPipeline, Shutdown),
+    profile and ISP configuration, frontend output streams, thermal throttling state, and zero-copy buffer
+    exchange with the encoder. A companion Protocol Buffers scheme describes the analytics metadata frames
+    (detections, landmarks, classifications, tracking ids) the analytics API emits over WebSocket and ZMQ.
+    The service runs on the board, so there is no public internet base URL.
+  humanURL: https://github.com/hailo-ai/hailo-media-library
+  x-base-url: none
+  x-base-url-note: >-
+    Deliberately no baseURL. MediaLibraryService is a gRPC service that runs ON the Hailo-15 board and is
+    reached over a local socket, with a Unix-domain-socket side-channel for DMA buffer descriptors. There
+    is no public internet host; inventing one would be a fabrication.
+  tags:
+  - Computer Vision
+  - Video Analytics
+  - gRPC
+  - Streaming
+  properties:
+  - type: Protobuf
+    url: grpc/hailo-media-library-service.proto
+  - type: Protobuf
+    url: grpc/hailo-analytics-metadata.proto
+  - type: SourceCode
+    url: https://github.com/hailo-ai/hailo-media-library
+  - type: Documentation
+    url: https://hailo-csdata.s3.eu-west-2.amazonaws.com/resources/documentation/documentation/hailo_media_library_1.12.0_user_guide.pdf
+  - type: AgentSkill
+    url: skills/_index.yml
 common:
+- type: DomainSecurity
+  url: security/hailo-domain-security.yml
 - type: Website
-  url: https://www.hiive.com/securities/hailo-stock
+  url: https://hailo.ai/
+- type: DeveloperPortal
+  url: https://hailo.ai/developer-zone/
+- type: Documentation
+  url: https://hailo.ai/developer-zone/documentation/
+- type: APIReference
+  url: https://hailo.ai/developer-zone/documentation/hailort/latest/
+- type: GitHubOrganization
+  url: https://github.com/hailo-ai
+- type: Support
+  url: https://community.hailo.ai/
+- type: Blog
+  url: https://hailo.ai/blog/
+- type: TermsOfService
+  url: https://hailo.ai/terms-and-conditions/website-terms-of-use/
+- type: PrivacyPolicy
+  url: https://hailo.ai/terms-and-conditions/privacy-policy/
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Packages
+  url: packages/hailo-packages.yml
+- type: SDKs
+  url: packages/hailo-packages.yml
+- type: CLI
+  url: cli/hailo-cli.yml
+- type: LLMsTxt
+  url: llms/hailo-llms.txt
+- type: Conformance
+  url: conformance/hailo-conformance.yml
+- type: Lifecycle
+  url: lifecycle/hailo-lifecycle.yml
+- type: ChangeLog
+  url: changelog/hailo-changelog.yml
+- type: Conventions
+  url: conventions/hailo-conventions.yml
+- type: Authentication
+  url: authentication/hailo-authentication.yml
+- type: ErrorCatalog
+  url: errors/hailo-problem-types.yml
+- type: DataModel
+  url: data-model/hailo-data-model.yml
+- type: Plans
+  url: plans/hailo-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/hailo-rate-limits.yml
+x-pointer-liveness:
+  checked: '2026-08-22'
+  method: curl with a Chrome 126 User-Agent, following redirects
+  note: >-
+    Every hailo.ai pointer returns HTTP 403 behind a Cloudflare "Just a moment..." interstitial, which
+    is a bot challenge and NOT a dead page — the site root itself answers 403 the same way. Each page
+    was corroborated as really existing before the pointer was emitted: the developer-zone and
+    documentation URLs are linked from Hailo's own hailort README, and the blog/terms/privacy URLs are
+    indexed with real Hailo content. No pointer was removed, because none was confirmed dead.
+  results:
+  - url: https://hailo.ai/
+    status: 403
+    verdict: bot-challenge
+  - url: https://hailo.ai/developer-zone/
+    status: 403
+    verdict: bot-challenge
+  - url: https://hailo.ai/developer-zone/documentation/
+    status: 403
+    verdict: bot-challenge
+  - url: https://hailo.ai/developer-zone/documentation/hailort/latest/
+    status: 403
+    verdict: bot-challenge
+  - url: https://hailo.ai/blog/
+    status: 403
+    verdict: bot-challenge
+  - url: https://hailo.ai/terms-and-conditions/website-terms-of-use/
+    status: 403
+    verdict: bot-challenge
+  - url: https://hailo.ai/terms-and-conditions/privacy-policy/
+    status: 403
+    verdict: bot-challenge
+  - url: https://github.com/hailo-ai
+    status: 200
+    verdict: live
+  - url: https://github.com/hailo-ai/hailort
+    status: 200
+    verdict: live
+  - url: https://github.com/hailo-ai/hailo-media-library
+    status: 200
+    verdict: live
+  - url: https://community.hailo.ai/
+    status: 200
+    verdict: live
+  - url: https://hailo-csdata.s3.eu-west-2.amazonaws.com/resources/documentation/documentation/hailo_media_library_1.12.0_user_guide.pdf
+    status: 200
+    verdict: live
+x-enrichment:
+  date: '2026-08-22'
+  status: enriched
+  artifacts_added: 36
+  pass: local-v1

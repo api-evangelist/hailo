@@ -1,0 +1,28 @@
+generated: '2026-08-22'
+method: searched
+source: https://hailo.ai/
+note: >-
+  Hailo publishes NO API pricing, plans or tiers, because it does not sell an API. It sells silicon —
+  M.2/mPCIe modules, chips and evaluation boards — through distributors and design-win engagements, and
+  the software stack (HailoRT, Model Zoo, TAPPAS, Media Library) is given away free, largely under MIT.
+  There is no meter, no quota, no overage and no self-serve checkout to record. The only gate on the
+  software is registration on the Developer Zone to download the Dataflow Compiler and prebuilt runtime
+  packages; registration is free. hailo.ai itself answers 403 to our crawler behind a Cloudflare
+  interstitial, so this is recorded from Hailo's own repository licences plus the Developer Zone's
+  documented registration requirement rather than from a pricing page we could read.
+plans: []
+plan_count: 0
+model: hardware sales via distributors; developer software free of charge
+free_tier:
+  available: true
+  detail: >-
+    HailoRT (MIT), Hailo Model Zoo (MIT), TAPPAS (LGPL-2.1), hailo-apps (MIT) and hailo-media-library
+    (MIT) are free and public on GitHub. The Hailo Dataflow Compiler is free but registration-gated.
+self_serve: false
+evidence:
+- url: https://hailo.ai/
+  status: 403
+  note: Cloudflare bot challenge; no pricing page was readable.
+- url: https://github.com/hailo-ai/hailort
+  status: 200
+  note: MIT licence on libhailort / pyhailort / hailortcli — the runtime is free.

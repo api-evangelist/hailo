@@ -1,0 +1,72 @@
+generated: '2026-08-22'
+method: derived
+source: grpc/hailo-media-library-service.proto, grpc/hailo-hailort-hrpc.proto, grpc/hailo-hef.proto, grpc/hailo-analytics-metadata.proto
+note: >-
+  Derived from the Protocol Buffers contracts saved in grpc/ plus the hailo-ai repository READMEs.
+  Hailo publishes no HTTP API, so the HTTP-shaped standards below are correctly absent rather than
+  failed. Nothing is asserted that is not visible in a saved artifact.
+conformance:
+- id: protobuf3
+  conforms: true
+  evidence: >-
+    Every saved contract declares syntax = "proto3" on line 1 — grpc/hailo-media-library-service.proto,
+    hailo-hailort-hrpc.proto, hailo-hailort-genai.proto, hailo-hef.proto, hailo-scheduler-monitor.proto,
+    hailo-tracer-profiler.proto, hailo-analytics-metadata.proto.
+- id: grpc
+  conforms: true
+  evidence: >-
+    grpc/hailo-media-library-service.proto declares `package media_library_service;` and
+    `service MediaLibraryService` with 33 rpc methods, five of which return `stream` types
+    (SubscribeToPipelineStateChange, SubscribeToThrottlingStateChange, SubscribeToProfileRestricted,
+    SubscribeToProfileRestrictionDone, SubscribeToFrontendBufferStream / SubscribeToEncoderBufferStream).
+- id: grpc-server-streaming
+  conforms: true
+  evidence: >-
+    Server-streaming RPCs in grpc/hailo-media-library-service.proto are the event surface — pipeline
+    state changes, thermal throttling transitions, profile restriction events, and frame buffer
+    metadata. There is no HTTP webhook or AsyncAPI document.
+- id: oauth2
+  conforms: false
+  evidence: No securityScheme, token endpoint or authorization server is published; the APIs are local device APIs.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 403 (bot challenge) on hailo.ai and 404 on community.hailo.ai.
+- id: rfc9457
+  conforms: false
+  evidence: >-
+    Errors are a protobuf enum, not application/problem+json — MediaLibraryStatus in
+    grpc/hailo-media-library-service.proto (PROTO_MEDIA_LIBRARY_SUCCESS / _ERROR / _INVALID_ARGUMENT /
+    _CONFIGURATION_ERROR / _BUFFER_ALLOCATION_ERROR / _DSP_OPERATION_ERROR ...) returned in
+    MedialibraryStatusReply with a free-text error_message.
+- id: pagination
+  conforms: false
+  evidence: No collection endpoints; the contracts are device control RPCs.
+- id: idempotency
+  conforms: false
+  evidence: >-
+    No idempotency key, header or retention window is defined anywhere in the saved contracts. Several
+    RPCs are naturally idempotent by shape (SetProfile, SetOverrideParameters), but nothing is declared.
+- id: json-schema
+  conforms: false
+  evidence: >-
+    The media-library configuration files under hailo-media-library/api/examples/config_examples/ are
+    JSON, but Hailo publishes no JSON Schema for them.
+domain_standards:
+- id: onnx
+  conforms: true
+  scope: model interchange
+  evidence: >-
+    The Hailo Dataflow Compiler and Model Zoo consume ONNX (and TFLite) as the model ingest format; the
+    hailo_model_zoo repository documents ONNX-in / HEF-out as the compilation path. Recorded as a
+    docs-level claim, not a contract declaration — no ONNX identifier appears inside grpc/hailo-hef.proto.
+- id: gstreamer
+  conforms: true
+  scope: media pipeline
+  evidence: >-
+    HailoRT ships the `hailonet` GStreamer element (hailo-ai/hailort README, LGPL-2.1-or-later), and
+    hailo-ai/tappas is a GStreamer pipeline library. GStreamer is the de-facto embedded-video pipeline
+    interface rather than a formal standards-body specification.
+domain_standard_note: >-
+  Edge AI accelerator silicon has no ratified API standard of the SCIM/OData/FHIR/OpenRTB kind, so the
+  domain_standard slot is left largely empty on purpose. ONNX and GStreamer are the two interfaces the
+  market actually converges on and Hailo supports both; neither is declared inside a saved contract.

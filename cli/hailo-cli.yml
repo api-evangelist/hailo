@@ -1,0 +1,69 @@
+generated: '2026-08-22'
+method: searched
+source: https://github.com/hailo-ai/hailort/tree/master/hailort/hailortcli
+note: >-
+  hailortcli is Hailo's first-party command line tool, shipped with HailoRT under the MIT license. The
+  command surface below is read verbatim from the CLI11 add_subcommand() registrations in
+  hailort/hailortcli/*.cpp at branch master (HailoRT v5.4.0) — command names and their help strings, not
+  a paraphrase. Commands registered with OptionVisibility::HIDDEN are marked hidden rather than dropped.
+  The full reference lives in the HailoRT User Guide on the Developer Zone, which returns 403 to our
+  crawler behind a Cloudflare interstitial.
+name: hailortcli
+description: HailoRT CLI — control a Hailo device, run inference, and collect statistics and device events.
+version: v5.4.0
+license: MIT
+repository: https://github.com/hailo-ai/hailort
+docs: https://hailo.ai/developer-zone/documentation/hailort/latest/
+install:
+- method: source
+  command: Build HailoRT from sources; hailortcli is produced alongside libhailort.
+  url: https://hailo.ai/developer-zone/documentation/hailort/latest/?sp_referrer=install/install.html#compiling-from-sources
+- method: package
+  command: Install the HailoRT .deb from the Hailo Developer Zone software downloads (registration required).
+  url: https://hailo.ai/developer-zone/
+commands:
+- name: run
+  description: Run a compiled network
+  subcommands:
+  - name: measure-stats
+    description: Pipeline Statistics Measurements
+  - name: collect-runtime-data
+    description: Collect runtime data to be used by the Profiler
+- name: run2
+  description: Run inference on multiple models concurrently (multi-model runner)
+- name: scan
+  description: Shows all available devices
+- name: benchmark
+  description: Measure basic performance on compiled network
+- name: measure-power
+  description: Measures power consumption
+- name: monitor
+  description: Monitor device stats
+- name: parse-hef
+  description: Parse HEF to get information about its components
+- name: fw-control
+  description: Useful firmware control operations
+  subcommands:
+  - name: identify
+    description: Displays general information about the device
+  - name: reset
+    description: Resets the device
+  - name: test-memories
+    description: Run a test of the chip's memories
+- name: logs
+  description: Prints the device logs
+- name: debug
+  description: Access to useful debug operations
+  subcommands:
+  - name: continue
+    description: Continue breakpoint action
+- name: board-config
+  description: Board configuration
+  hidden: true
+- name: measure-nnc-performance
+  description: Neural network core performance estimation
+  hidden: true
+- name: memory-requirements
+  description: Memory requirement estimation
+  hidden: true
+command_count: 13

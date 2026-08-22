@@ -1,0 +1,33 @@
+generated: '2026-08-22'
+method: derived
+source: grpc/hailo-media-library-service.proto, grpc/hailo-hailort-hrpc.proto, skills/hailo-connect.md
+note: >-
+  derive-authentication.py was not run because it reads OpenAPI securitySchemes and Hailo publishes no
+  OpenAPI. This profile is derived from the saved Protocol Buffers contracts and from Hailo's own
+  published skill documentation. Hailo has NO network API and therefore no API keys, OAuth flows, JWTs
+  or token endpoints of any kind — the surfaces below are locally authenticated by the operating system.
+  Nothing here is a vulnerability report; every value is published by Hailo in its own public repository.
+schemes: []
+scheme_count: 0
+network_authentication: none
+local_access_model:
+- surface: HailoRT library / hailortcli
+  transport: PCIe (kernel driver) or USB
+  authentication: OS file permissions on the /dev/hailo* device nodes; no application-level credential.
+  evidence: https://github.com/hailo-ai/hailort-drivers
+- surface: MediaLibraryService gRPC
+  transport: local gRPC socket on the Hailo-15 board
+  authentication: >-
+    None declared in the contract. grpc/hailo-media-library-service.proto defines no credential, token
+    or metadata field on any of its 33 RPCs; the service is reachable only from the board.
+  evidence: grpc/hailo-media-library-service.proto
+- surface: Hailo-15 SBC shell
+  transport: SSH over ethernet
+  authentication: >-
+    Password. Hailo's own published skill states the board's factory default is root / root at
+    10.0.0.1 — a documented development default, quoted here from the provider's public repository.
+  evidence: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/connect/SKILL.md
+- surface: Hailo Developer Zone downloads
+  transport: HTTPS
+  authentication: Account registration (form-gated), required to download the Dataflow Compiler, HailoRT wheels and .deb packages.
+  evidence: https://hailo.ai/developer-zone/

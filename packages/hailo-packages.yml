@@ -1,0 +1,117 @@
+generated: '2026-08-22'
+method: searched
+source: https://github.com/hailo-ai
+note: >-
+  Hailo publishes NO client library to any public package registry. npm, PyPI, RubyGems, crates.io,
+  NuGet, Maven Central and pkg.go.dev were all queried unauthenticated on 2026-08-22 and returned no
+  first-party Hailo package. The runtime is distributed two ways instead — source on GitHub under the
+  verified hailo-ai organization (versioned by git tag / GitHub release), and prebuilt binaries
+  (.deb/.whl/.zip) behind a registration wall on the Hailo Developer Zone software-downloads page.
+  Version and published date below are read from the GitHub Releases API, which is the only dated,
+  provider-published currency signal available for these artifacts.
+registries_checked:
+- registry: npm
+  result: no first-party package
+  note: >-
+    npm "hailo" exists at 0.1.0 published 2014-11-16 and is an API wrapper for the DEFUNCT Hailo taxi
+    app (a different company, later mytaxi/FreeNow). It is third-party and unrelated to Hailo
+    Technologies Ltd.; deliberately NOT listed below.
+- registry: pypi
+  result: no first-party package
+  note: hailo, hailort, hailo-platform, hailo-sdk, hailo-model-zoo, hailo-apps all 404 on pypi.org/pypi/<name>/json.
+- registry: rubygems
+  result: not applicable
+- registry: crates.io
+  result: not applicable
+- registry: nuget
+  result: not applicable
+- registry: maven-central
+  result: not applicable
+- registry: pkg.go.dev
+  result: not applicable
+packages:
+- language: c
+  secondary_languages:
+  - c++
+  - python
+  registry: github-releases
+  name: hailort
+  url: https://github.com/hailo-ai/hailort
+  install: git clone https://github.com/hailo-ai/hailort.git && ./hailort/scripts/... (see Compiling HailoRT from Sources)
+  official: true
+  license: MIT (libhailort, pyhailort, hailortcli); LGPL-2.1-or-later (hailonet GStreamer element)
+  version: v5.4.0
+  published: '2026-08-16'
+  note: >-
+    HailoRT library + pyHailoRT Python binding + hailortcli. Master supports Hailo-10 and Hailo-15;
+    Hailo-8/8R/8L are on the hailo8 branch. A parallel v4 line is still released (v4.24.0, 2026-06-25).
+    Prebuilt .whl/.deb are on the Developer Zone behind registration, not on PyPI.
+- language: c
+  registry: github-releases
+  name: hailort-drivers
+  url: https://github.com/hailo-ai/hailort-drivers
+  install: make -C linux/pcie all && sudo make -C linux/pcie install
+  official: true
+  license: GPL-2.0
+  version: v5.4.0
+  published: '2026-08-16'
+  note: PCIe kernel driver plus the Hailo device firmware; required by HailoRT.
+- language: python
+  registry: github-releases
+  name: hailo_model_zoo
+  url: https://github.com/hailo-ai/hailo_model_zoo
+  install: pip install -e . (from a clone; requires the Hailo Dataflow Compiler from the Developer Zone)
+  official: true
+  license: MIT
+  version: v5.4.0
+  published: '2026-07-05'
+  note: >-
+    Pre-trained models plus the build/evaluate environment. Not on PyPI — installed from source, and it
+    depends on the Dataflow Compiler wheel, which is registration-gated.
+- language: python
+  registry: github-releases
+  name: hailo_model_zoo_genai
+  url: https://github.com/hailo-ai/hailo_model_zoo_genai
+  install: git clone https://github.com/hailo-ai/hailo_model_zoo_genai.git
+  official: true
+  license: MIT
+  version: null
+  published: null
+  note: >-
+    Generative-AI model zoo (LLM/VLM/speech). No GitHub release or tag published as of 2026-08-22, so
+    there is no dated version to record; last push was 2026-04-15. Checked, nothing to record.
+- language: c++
+  registry: github-releases
+  name: tappas
+  url: https://github.com/hailo-ai/tappas
+  install: git clone https://github.com/hailo-ai/tappas.git && ./install.sh
+  official: true
+  license: LGPL-2.1
+  version: v5.4.0
+  published: '2026-08-16'
+  note: GStreamer-based application pipelines and postprocess .so libraries.
+- language: c++
+  registry: github-releases
+  name: hailo-media-library
+  url: https://github.com/hailo-ai/hailo-media-library
+  install: Yocto SDK sysroot (meta-hailo layers); not distributed standalone.
+  official: true
+  license: MIT
+  version: v1.12.1
+  published: '2026-08-10'
+  note: >-
+    C++ media/vision stack for the Hailo-15 SoC; ships the MediaLibraryService gRPC contract saved in
+    grpc/hailo-media-library-service.proto. Default branch is the version branch 1.12.1, not main.
+- language: python
+  registry: github-releases
+  name: hailo-apps
+  url: https://github.com/hailo-ai/hailo-apps
+  install: git clone https://github.com/hailo-ai/hailo-apps.git && ./install.sh
+  official: true
+  license: MIT
+  version: 26.03.1
+  published: '2026-04-13'
+  note: Reference applications (Raspberry Pi 5 / Hailo-8L and Hailo-10H). Calendar-versioned, not semver.
+package_count: 7
+official_count: 7
+registry_published_count: 0

@@ -1,0 +1,118 @@
+generated: '2026-08-22'
+method: probed
+source: probed 2026-08-22 with a Chrome 126 User-Agent, following redirects
+note: >-
+  No .well-known document was served by any Hailo host. hailo.ai sits behind a Cloudflare interstitial
+  ("Just a moment...") that answers 403 to every path including the site root, so those rows record a
+  bot challenge, not a proven absence. community.hailo.ai (Discourse) is reachable and returned a real
+  404 for every .well-known path probed. Because nothing returned a 200 carrying a real document, NO
+  WellKnown or SecurityTxt pointer is emitted in apis.yml.
+hosts:
+- host: hailo.ai
+  reachable: false
+  note: Cloudflare bot challenge — every path returns 403 with a "Just a moment..." HTML interstitial.
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 403
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+    file: null
+  - path: /.well-known/api-catalog
+    status: 403
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 403
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 403
+    file: null
+  - path: /.well-known/agent.json
+    status: 403
+    file: null
+  - path: /llms.txt
+    status: 403
+    file: null
+  - path: /openapi.json
+    status: 403
+    file: null
+  - path: /swagger.json
+    status: 403
+    file: null
+  - path: /api-docs
+    status: 403
+    file: null
+  - path: /robots.txt
+    status: 403
+    file: null
+- host: community.hailo.ai
+  reachable: true
+  note: >-
+    Hailo's community forum, a Discourse instance. It serves Discourse's own /site.json and /about.json
+    (HTTP 200) — that is the Discourse platform API, not a Hailo product API, so it is recorded here and
+    not registered as a Hailo API.
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+  - path: /llms.txt
+    status: 404
+    file: null
+  - path: /site.json
+    status: 200
+    file: null
+  - path: /about.json
+    status: 200
+    file: null
+- host: api.hailo.ai
+  reachable: false
+  note: Does not resolve / no TLS listener (curl exit 6, DNS resolution failure).
+  documents:
+  - path: /
+    status: 0
+    file: null
+- host: developer.hailo.ai
+  reachable: false
+  note: Does not resolve (curl exit 6).
+  documents:
+  - path: /
+    status: 0
+    file: null
+- host: docs.hailo.ai
+  reachable: false
+  note: Does not resolve (curl exit 6).
+  documents:
+  - path: /
+    status: 0
+    file: null
+- host: hailo-csdata.s3.eu-west-2.amazonaws.com
+  reachable: true
+  note: >-
+    Public S3 bucket Hailo's own CLAUDE.md points at for the Hailo-15 user guides. Serves the PDFs
+    anonymously (HTTP 206 on a ranged GET) but exposes no .well-known surface — it is a bucket, not a site.
+  documents:
+  - path: /resources/documentation/documentation/hailo_media_library_1.12.0_user_guide.pdf
+    status: 206
+    file: null
+document_count: 0

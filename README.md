@@ -64,5 +64,35 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Hailo is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.hiive.com/securities/hailo-stock
+Hailo Technologies Ltd. is an Israeli fabless semiconductor company, headquartered in Tel Aviv, that
+designs AI inference accelerators (Hailo-8, Hailo-8L, Hailo-10) and AI vision processors (the Hailo-15
+SoC family) for edge devices.
+
+**Hailo publishes no hosted web API.** There is no REST or GraphQL endpoint, no MCP server, no API key
+and no base URL. What Hailo publishes is on-device software, almost all of it public on GitHub under the
+verified `hailo-ai` organization, and this profile records that surface as it actually is.
+
+What was found on 2026-08-22:
+
+- **Seven Protocol Buffers contracts**, saved verbatim in `grpc/`. The strongest is
+  `hailo-media-library-service.proto` — a real gRPC `service MediaLibraryService` with 33 RPCs, five of
+  them server-streaming. Also the HailoRT hRPC and GenAI schemes, the HEF model-file format, the
+  analytics metadata scheme, and two telemetry schemes.
+- **Twelve first-party Agent Skills**, saved verbatim in `skills/` from
+  [`hailo-ai/hailo15-agentic-coding`](https://github.com/hailo-ai/hailo15-agentic-coding) — Hailo's own
+  packaged skills for connecting to a Hailo-15 SBC, editing pipelines, swapping models,
+  cross-compiling and deploying. API Evangelist authored none of them.
+- **`hailortcli`**, Hailo's first-party CLI, with its command surface read from the source.
+- **No package on any public registry** — npm, PyPI, RubyGems, crates.io, NuGet, Maven Central and
+  pkg.go.dev were all queried and returned nothing first-party. Distribution is GitHub releases plus
+  registration-gated downloads on the Developer Zone.
+
+`hailo.ai` sits behind a Cloudflare bot challenge that returns HTTP 403 to non-browser clients, so the
+Developer Zone documentation could not be read directly; everything above comes from sources that were
+actually reachable.
+
+Sources:
+- https://hailo.ai/
+- https://github.com/hailo-ai
+- https://community.hailo.ai/
+- https://www.hiive.com/securities/hailo-stock (secondary-market listing that surfaced this company; not Hailo's own site)

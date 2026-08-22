@@ -1,0 +1,33 @@
+generated: '2026-08-22'
+method: derived
+source: grpc/hailo-media-library-service.proto
+note: >-
+  Hailo publishes no rate limits, because there is no metered network API to limit. The saved contracts
+  are local device RPCs. What DOES exist, and is the runtime backpressure signal an agent on this
+  platform must actually respect, is thermal throttling — recorded below as a limit-shaped signal rather
+  than left out. It is not a request quota and is not scored as one.
+limits: []
+limit_count: 0
+headers: []
+status_on_exhaustion: null
+runtime_backpressure:
+- signal: thermal throttling state
+  read_with: GetThrottlingState
+  streamed_with: SubscribeToThrottlingStateChange (server-streaming ThrottlingStateChangeEvent)
+  values:
+  - THROTTLING_STATE_FULL_PERFORMANCE
+  - THROTTLING_STATE_COOLING
+  - THROTTLING_STATE_S0
+  - THROTTLING_STATE_S1
+  - THROTTLING_STATE_S2
+  - THROTTLING_STATE_S3
+  - THROTTLING_STATE_S4
+  effect: >-
+    When restriction is active the service can refuse a profile with
+    PROTO_MEDIA_LIBRARY_PROFILE_IS_RESTRICTED (see errors/hailo-problem-types.yml) and fall back to the
+    profile set by SetRestrictionFallbackProfile.
+  evidence: grpc/hailo-media-library-service.proto (Throttling block)
+- signal: resource exhaustion
+  returned_as: PROTO_MEDIA_LIBRARY_OUT_OF_RESOURCES / PROTO_MEDIA_LIBRARY_BUFFER_ALLOCATION_ERROR
+  effect: Buffer/CMA heap exhaustion on the board; release buffers rather than retrying.
+  evidence: grpc/hailo-media-library-service.proto

@@ -1,0 +1,82 @@
+generated: '2026-08-22'
+method: searched
+source: https://github.com/hailo-ai/hailo15-agentic-coding
+note: >-
+  These are Hailo's OWN Agent Skills, published first-party in the verified hailo-ai GitHub
+  organization and shipped inside the hailo-media-library SDK under .claude/. They were saved
+  verbatim; API Evangelist authored none of them. They drive a physical Hailo-15 SBC over SSH plus
+  the local Yocto SDK — they are not calls against a hosted API.
+api: hailo-media-library
+publisher: Hailo Technologies Ltd.
+repository: https://github.com/hailo-ai/hailo15-agentic-coding
+default_branch: main
+also_shipped_in: https://github.com/hailo-ai/hailo-media-library (under .claude/, refreshed each Hailo VPU SDK release)
+format: Claude Agent Skills (SKILL.md with name/description/tools frontmatter)
+agents_file: skills/hailo-AGENTS.md
+companion_agents:
+- doc-explorer
+- pipeline-expert
+- apps-expert
+- perf-expert
+skills:
+- name: connect
+  phase: connection
+  file: skills/hailo-connect.md
+  description: Establish an SSH connection to the Hailo-15 SBC over ethernet (default root@10.0.0.1).
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/connect/SKILL.md
+- name: explain-pipeline
+  phase: explore
+  file: skills/hailo-explain-pipeline.md
+  description: Trace and explain a hailo-media-library application's pipeline — sources, AI stages, sinks, and the medialib config.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/explain-pipeline/SKILL.md
+- name: get-model
+  phase: explore
+  file: skills/hailo-get-model.md
+  description: Propose and download a HEF from the public Hailo Model Zoo, per board (H15L/H15H) and task.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/get-model/SKILL.md
+- name: add-stream
+  phase: modification
+  file: skills/hailo-add-stream.md
+  description: Add a new output stream (sinkN) — resolution, framerate, encoder — to a media-library app.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/add-stream/SKILL.md
+- name: add-overlay
+  phase: modification
+  file: skills/hailo-add-overlay.md
+  description: Add, modify or remove an AI analytics overlay (bboxes, masks, landmarks) on an encoded stream.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/add-overlay/SKILL.md
+- name: swap-model
+  phase: modification
+  file: skills/hailo-swap-model.md
+  description: Replace the AI model in a media-library app with a different HEF.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/swap-model/SKILL.md
+- name: edit-pipeline
+  phase: modification
+  file: skills/hailo-edit-pipeline.md
+  description: Modify an app's pipeline via medialib JSON on the board, or via main.cpp create_pipeline() plus cross-compile.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/edit-pipeline/SKILL.md
+- name: cross-compile
+  phase: build
+  file: skills/hailo-cross-compile.md
+  description: Cross-compile a media-library app for the H15 SBC against the Yocto SDK sysroot.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/cross-compile/SKILL.md
+- name: deploy
+  phase: deploy
+  file: skills/hailo-deploy.md
+  description: Push binary, configs and HEFs to the H15 SBC and verify the app runs.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/deploy/SKILL.md
+- name: run-app
+  phase: deploy
+  file: skills/hailo-run-app.md
+  description: Run a hailo-media-library app on the board and display its output.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/run-app/SKILL.md
+- name: board-status
+  phase: debug
+  file: skills/hailo-board-status.md
+  description: Snapshot the H15 SBC's thermals, power, CPU, DRAM, NN-core and DSP utilization.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/board-status/SKILL.md
+- name: update-h15-agentic-coding
+  phase: maintenance
+  file: skills/hailo-update-h15-agentic-coding.md
+  description: Pull the latest skills, agents and tooling from hailo15-agentic-coding into a media-library checkout.
+  source: https://github.com/hailo-ai/hailo15-agentic-coding/blob/main/.claude/skills/update-h15-agentic-coding/SKILL.md
+skill_count: 12

@@ -1,0 +1,112 @@
+generated: '2026-08-22'
+method: derived
+source: grpc/hailo-analytics-metadata.proto, grpc/hailo-media-library-service.proto, grpc/hailo-hef.proto, grpc/hailo-hailort-hrpc.proto
+note: >-
+  Entity graph derived from message definitions and their nesting in the saved Protocol Buffers files.
+  Relationships are read from actual field declarations (repeated / optional / message-typed fields), not
+  inferred from names. There is no id-prefix scheme and no object-reference documentation to search — the
+  handles are numeric and process-scoped.
+entities:
+- name: Frame
+  source: grpc/hailo-analytics-metadata.proto
+  description: Top-level analytics metadata payload for one video frame, sent over WebSocket / ZMQ.
+  fields:
+  - isp_timestamp_ns (uint64)
+  - frame_width (uint32)
+  - frame_height (uint32)
+  relationships:
+  - has_many: Detection
+    via: detections
+  - has_many: Landmarks
+    via: landmarks
+  - has_many: Classification
+    via: classifications
+- name: Detection
+  source: grpc/hailo-analytics-metadata.proto
+  description: One detected object, optionally enriched and hierarchically nested (mirrors HailoROI nesting).
+  fields:
+  - label (string)
+  - confidence (float)
+  - tracking_id (optional uint32)
+  relationships:
+  - has_one: Bbox
+    via: bbox
+  - has_many: Detection
+    via: detections
+    note: Self-referential — sub-objects nest arbitrarily deep.
+  - has_many: Landmarks
+    via: landmarks
+  - has_many: Classification
+    via: classifications
+- name: Bbox
+  source: grpc/hailo-analytics-metadata.proto
+  description: Axis-aligned bounding box in native frame pixel coordinates (xmin, ymin, xmax, ymax as floats).
+  relationships: []
+- name: Landmarks
+  source: grpc/hailo-analytics-metadata.proto
+  description: >-
+    A set of keypoints. points is a packed flat float array laid out [x0, y0, conf0, ...] with
+    points_format "x,y,conf" and points_stride 3; pairs is a packed flat uint32 array of skeleton edges.
+  relationships: []
+- name: Classification
+  source: grpc/hailo-analytics-metadata.proto
+  description: One classification result (type, label, confidence) attached to a Frame or a Detection.
+  relationships: []
+- name: PipelineState
+  source: grpc/hailo-media-library-service.proto
+  description: Service lifecycle state — UNINITIALIZED, RUNNING, STOPPED. Read with GetPipelineState, streamed as PipelineStateChangeEvent.
+  relationships: []
+- name: Profile
+  source: grpc/hailo-media-library-service.proto
+  description: >-
+    A named media/ISP configuration. Read with GetProfile / GetCurrentProfile, applied with SetProfile,
+    cleared with ResetProfiles, snapshotted with BackupProfiles. May be restricted by thermal state.
+  relationships:
+  - has_one: ThrottlingState
+    via: profile restriction (ProfileRestrictedEvent)
+    note: Association is behavioural — a restricted profile is reported via the restriction event stream, not by a field.
+- name: FrontendOutputStream
+  source: grpc/hailo-media-library-service.proto
+  description: One frontend output (a sink) — a resolution/framerate the ISP produces. Enumerated by GetFrontendOutputStreams.
+  relationships:
+  - has_many: BufferMetadata
+    via: SubscribeToFrontendBufferStream
+- name: BufferMetadata
+  source: grpc/hailo-media-library-service.proto
+  description: >-
+    Metadata for one DMA buffer streamed to the client; the file descriptor travels over a Unix domain
+    socket side-channel. Must be returned with ReleaseBuffer.
+  relationships:
+  - belongs_to: FrontendOutputStream
+    via: subscription
+- name: ProtoHEFHef
+  source: grpc/hailo-hef.proto
+  description: Root of the HEF compiled-model file format.
+  relationships:
+  - has_one: ProtoHEFHeader
+    via: header
+  - has_many: ProtoHEFNetworkGroup
+    via: network_groups
+  - has_one: ProtoHEFIncludedFeatures
+    via: included_features
+  - has_many: ProtoHEFExtension
+    via: extensions
+  - has_many: ProtoHEFOptionalExtension
+    via: optional_extensions
+  - has_many: ProtoHEFExternalResource
+    via: external_resources
+- name: HailoObjectHandle
+  source: grpc/hailo-hailort-hrpc.proto
+  description: Opaque uint32 handle identifying a HailoRT object (VDevice, model, generator) across the hRPC boundary.
+  relationships: []
+- name: HailoCallbackHandle
+  source: grpc/hailo-hailort-hrpc.proto
+  description: Opaque handle pairing a callback with its dispatcher (id + dispatcher_id).
+  relationships: []
+id_scheme:
+  documented: false
+  detail: >-
+    No prefixed or globally unique identifiers. Handles are process-scoped uint32 counters
+    (HailoObjectHandle.id, HailoCallbackHandle.id) and profiles are addressed by name.
+entity_count: 12
+render: null

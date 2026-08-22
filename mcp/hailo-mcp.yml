@@ -1,0 +1,25 @@
+generated: '2026-08-22'
+method: searched
+source: https://github.com/hailo-ai
+status: none
+note: >-
+  Hailo publishes NO MCP server, hosted or local. The hailo-ai GitHub organization (47 public repos,
+  enumerated 2026-08-22) contains no MCP implementation, hailo.ai is behind a Cloudflare bot challenge
+  that returns 403 to every path, and no npm/PyPI package exists to install. What Hailo DOES ship on
+  the agent side is a first-party Agent Skills package (skills/, twelve skills from
+  hailo-ai/hailo15-agentic-coding) that drives a physical Hailo-15 board over SSH — a different agent
+  surface from MCP, and the reason no MCPServer pointer is wired into apis.yml. A candidate tool list
+  is NOT derived here: the only machine-readable contract is a gRPC service that runs on the board over
+  a local socket, so an agent could not reach it remotely even if tools were named for it.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+tools: []
+tool_count: 0
+candidate_sources:
+- grpc/hailo-media-library-service.proto
+- grpc/hailo-hailort-hrpc.proto

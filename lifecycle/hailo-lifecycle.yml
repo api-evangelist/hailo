@@ -1,0 +1,61 @@
+generated: '2026-08-22'
+method: searched
+source: https://github.com/hailo-ai/hailort/releases
+note: >-
+  Hailo's versioning and change history are observable through GitHub Releases across the hailo-ai
+  organization; the narrative changelog itself lives on the Developer Zone, which is behind a Cloudflare
+  bot challenge for our crawler (403). No status page, SLA, deprecation policy or Sunset/Deprecation
+  header policy was found — these are device SDKs, not a hosted service, so there is no uptime surface
+  to publish. No StatusPage or Deprecation pointer is emitted, because neither exists.
+versioning:
+  scheme: semver
+  current_version: v5.4.0
+  released: '2026-08-16'
+  applies_to:
+  - hailort
+  - hailort-drivers
+  - hailo_model_zoo
+  - tappas
+  note: >-
+    HailoRT, the PCIe drivers, the model zoo and TAPPAS are released in lockstep on a single version
+    number. hailo-media-library versions independently (v1.12.1, 2026-08-10) and hailo-apps uses
+    calendar versioning (26.03.1, 2026-04-13).
+  parallel_lines:
+  - line: '5.x'
+    devices: Hailo-10, Hailo-15
+    branch: master
+    latest: v5.4.0
+    released: '2026-08-16'
+  - line: '4.x'
+    devices: Hailo-8, Hailo-8R, Hailo-8L
+    branch: hailo8
+    latest: v4.24.0
+    released: '2026-06-25'
+    note: >-
+      Still actively released alongside 5.x. The hailort README states master supports only Hailo-10 and
+      Hailo-15 and directs Hailo-8 users to the hailo8 branch — a device-family split, not a deprecation.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  evidence: >-
+    No deprecation or sunset policy found in the hailo-ai repositories or reachable documentation. The
+    only end-of-support-shaped statement is the master/hailo8 branch split described above.
+status_page:
+  published: false
+  evidence: >-
+    No status.hailo.ai; status.hailo.ai, api.hailo.ai, developer.hailo.ai and docs.hailo.ai do not
+    resolve. Hailo ships silicon and on-device software, so there is no service to report uptime for.
+sla:
+  published: false
+support:
+  channel: community forum
+  url: https://community.hailo.ai/
+  status: 200
+  note: Discourse instance, publicly readable; posting requires an account. Named as the support route in the hailort README.
+  secondary:
+  - channel: contact form
+    url: https://hailo.ai/contact-us/
+release_cadence:
+  observed: roughly quarterly
+  evidence: 'hailort releases: v5.1.0 2025-09-30, v5.1.1 2025-11-09, v5.2.0 2026-01-08, v5.3.0 2026-04-05, v5.4.0 2026-08-16'

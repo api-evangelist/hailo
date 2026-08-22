@@ -1,0 +1,144 @@
+generated: '2026-08-22'
+method: derived
+source: grpc/hailo-media-library-service.proto, grpc/hailo-hailort-hrpc.proto, grpc/hailo-analytics-metadata.proto
+note: >-
+  Cross-cutting semantics derived from the Protocol Buffers contracts saved in grpc/. Hailo publishes no
+  HTTP API, so the HTTP-shaped conventions (pagination, sparse fields, rate-limit headers, request-id
+  tracing) are genuinely absent rather than undocumented. Every operationId below is an rpc name that
+  exists in the saved .proto; nothing is inferred from prose.
+auth_style:
+  style: none
+  detail: See authentication/hailo-authentication.yml — local device access, no network credential.
+transport:
+  primary: gRPC over HTTP/2, local socket on the Hailo-15 board
+  secondary:
+  - Unix domain socket side-channel for DMA buffer file descriptors (SubscribeToFrontendBufferStream / SubscribeToEncoderBufferStream)
+  - WebSocket and ZMQ for analytics metadata frames (grpc/hailo-analytics-metadata.proto)
+  - PCIe / USB via the HailoRT kernel driver for device control
+versioning:
+  style: package version, not URL or header
+  detail: >-
+    The gRPC package is `media_library_service` with no version segment. Compatibility is managed by
+    shipping the client and service together in one SDK release (hailo-media-library v1.12.1); HailoRT
+    versions separately (v5.4.0). See lifecycle/hailo-lifecycle.yml.
+error_envelope:
+  style: protobuf status enum
+  reply_message: MedialibraryStatusReply
+  fields:
+  - status (MediaLibraryStatus enum)
+  - error_message (free-text string)
+  detail: >-
+    27 of the 33 RPCs return MedialibraryStatusReply. There is no RFC 9457 problem+json, no error code
+    namespace, and no machine-readable remediation hint — error_message is unstructured. See
+    errors/hailo-problem-types.yml.
+pagination:
+  supported: false
+  detail: No collection endpoints exist; the contract is device control, not resource listing.
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+  detail: No free-form metadata / custom-field object on any message.
+request_id_tracing:
+  supported: false
+  detail: >-
+    No correlation id, request id or trace header is defined. The nearest thing is
+    HailoObjectHandle.id / HailoCallbackHandle.id in grpc/hailo-hailort-hrpc.proto, which correlate
+    a callback to its originating object — a handle, not a trace.
+rate_limit_signaling:
+  supported: false
+  detail: >-
+    No rate limiting. The closest runtime backpressure signal is thermal: GetThrottlingState and the
+    ThrottlingStateChangeEvent stream report FULL_PERFORMANCE / COOLING / S0 / S1 / S2, which an agent
+    should treat as the real "slow down" signal on this platform. See rate-limits/hailo-rate-limits.yml.
+idempotency:
+  supported: false
+  key_header: null
+  scope: null
+  retention: null
+  detail: >-
+    No idempotency key, request key or deduplication window is declared anywhere in the saved contracts.
+    Several RPCs are idempotent by shape — SetProfile, SetOverrideParameters, SetRestrictionFallbackProfile,
+    SetAutoProfileRestrictionEnabled are last-write-wins, and Initialize/StartPipeline are guarded by
+    PipelineState — but Hailo declares nothing, so a client cannot safely retry a write without reading
+    state back with GetPipelineState / GetCurrentProfile first.
+dry_run_mode:
+  supported: false
+  detail: >-
+    No rehearsal or validate-only mode on any write RPC. parse-hef (hailortcli) inspects a compiled model
+    without loading it to the device, which is the only preview-shaped affordance published.
+reversibility:
+  grade: documented
+  detail: >-
+    The write surface is genuinely reversible by construction — every lifecycle and subscription verb in
+    MediaLibraryService has a named inverse RPC in the same contract, and profile edits have both a reset
+    and a backup path. What Hailo does NOT publish is a WINDOW: nothing in the contract or in any
+    reachable documentation states how long a backup is retained, whether ResetProfiles restores factory
+    values or the last backup, or how long a leaked buffer handle survives before the encoder reclaims it.
+    That missing window is the whole gap between `documented` and `verified` here, and it is not invented.
+  write_surface: true
+  reversals:
+  - action: Initialize
+    reverses_with: Uninitialize
+    operationId: Uninitialize
+    window: not stated
+    evidence: grpc/hailo-media-library-service.proto (Service Management block)
+  - action: StartPipeline
+    reverses_with: StopPipeline
+    operationId: StopPipeline
+    window: not stated
+    evidence: grpc/hailo-media-library-service.proto
+  - action: SetProfile
+    reverses_with: ResetProfiles
+    operationId: ResetProfiles
+    window: >-
+      not stated — the contract does not say what ResetProfiles resets TO (factory defaults or the last
+      BackupProfiles snapshot), nor for how long a backup remains valid.
+    evidence: grpc/hailo-media-library-service.proto (Profiles and Configuration block)
+  - action: SetProfile / SetOverridePersistentSettings
+    reverses_with: BackupProfiles then restore
+    operationId: BackupProfiles
+    window: not stated
+    evidence: >-
+      BackupProfiles and SetDefaultBackupFolderPath exist; no retention period or restore RPC is declared
+      in the contract.
+  - action: SubscribeToPipelineStateChange
+    reverses_with: connection close (no named unsubscribe RPC)
+    operationId: null
+    window: not stated
+    evidence: >-
+      Asymmetry worth flagging: throttling and profile-restriction subscriptions each have an explicit
+      Unsubscribe RPC, but the pipeline-state subscription does not.
+  - action: SubscribeToThrottlingStateChange
+    reverses_with: UnsubscribeFromThrottlingStateChange
+    operationId: UnsubscribeFromThrottlingStateChange
+    window: not stated
+    evidence: grpc/hailo-media-library-service.proto (Throttling block)
+  - action: SubscribeToProfileRestricted / SubscribeToProfileRestrictionDone
+    reverses_with: UnsubscribeFromProfileRestrictionCallbacks
+    operationId: UnsubscribeFromProfileRestrictionCallbacks
+    window: not stated
+    evidence: grpc/hailo-media-library-service.proto
+  - action: frontend subscriptions (all)
+    reverses_with: UnsubscribeAllFromFrontend
+    operationId: UnsubscribeAllFromFrontend
+    window: not stated
+    evidence: grpc/hailo-media-library-service.proto (Frontend / Encoder block)
+  - action: SubscribeToFrontendBufferStream / SubscribeToEncoderBufferStream
+    reverses_with: ReleaseBuffer
+    operationId: ReleaseBuffer
+    window: >-
+      not stated — a DMA buffer handed to the client must be returned with ReleaseBuffer, but no timeout
+      or reclaim policy is published, so a client cannot know how long it may hold one.
+    evidence: grpc/hailo-media-library-service.proto (Buffer Streaming block)
+  irreversible:
+  - operationId: Shutdown
+    note: Terminates the service; no counterpart RPC. Reconnect re-establishes a client session, it does not undo a shutdown.
+  - operationId: reset (hailortcli fw-control reset)
+    note: Hard device reset. Documented in cli/hailo-cli.yml; no undo.
+cross_links:
+  errors: errors/hailo-problem-types.yml
+  lifecycle: lifecycle/hailo-lifecycle.yml
+  authentication: authentication/hailo-authentication.yml
+  rate_limits: rate-limits/hailo-rate-limits.yml
+  data_model: data-model/hailo-data-model.yml

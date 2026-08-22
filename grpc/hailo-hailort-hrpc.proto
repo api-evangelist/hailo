@@ -1,0 +1,456 @@
+syntax = "proto3";
+
+option optimize_for = LITE_RUNTIME;
+
+message HailoObjectHandle {
+    uint32 id = 1;
+}
+
+message HailoCallbackHandle {
+    uint32 id = 1;
+    uint32 dispatcher_id = 2;
+}
+
+message VDeviceParamsProto {
+    uint32 scheduling_algorithm = 1;
+    string group_id = 2;
+}
+
+message VDevice_Create_Request {
+    VDeviceParamsProto params = 1;
+    bool should_disable_pp_ops = 2;
+}
+
+message VDevice_Create_Reply {
+    HailoObjectHandle vdevice_handle = 1;
+}
+
+message VDevice_Destroy_Request {
+    HailoObjectHandle vdevice_handle = 1;
+}
+
+message VDevice_Destroy_Reply {}
+
+message VDevice_CreateInferModel_Request {
+    HailoObjectHandle vdevice_handle = 1;
+    uint64 hef_size = 2;
+    string name = 3;
+    // Protocol note: After this message, server expects to get HEF data (buffer of size 'hef_size')
+}
+
+message VDevice_CreateInferModel_Reply {
+    HailoObjectHandle infer_model_handle = 1;
+}
+
+message InferModel_Destroy_Request {
+    HailoObjectHandle infer_model_handle = 1;
+}
+
+message InferModel_Destroy_Reply {}
+
+message InferStreamParamsProto {
+    string name = 1;
+    uint32 format_order = 2;
+    uint32 format_type = 3;
+    float nms_score_threshold = 4;
+    float nms_iou_threshold = 5;
+    uint32 nms_max_proposals_per_class = 6;
+    uint32 nms_max_accumulated_mask_size = 7;
+    uint32 nms_max_proposals_total = 8;
+};
+
+message InferModel_CreateConfiguredInferModel_Request {
+    HailoObjectHandle infer_model_handle = 1;
+    HailoObjectHandle vdevice_handle = 2;
+    repeated InferStreamParamsProto input_infer_streams  = 3;
+    repeated InferStreamParamsProto output_infer_streams  = 4;
+    uint32 batch_size = 5;
+    uint32 power_mode = 6;
+    uint32 latency_flag = 7;
+    bool enable_kv_cache = 8;
+}
+
+message InferModel_CreateConfiguredInferModel_Reply {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    uint32 async_queue_size = 2;
+}
+
+message ConfiguredInferModel_Destroy_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+}
+
+message ConfiguredInferModel_Destroy_Reply {}
+
+message ConfiguredInferModel_SetSchedulerTimeout_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    uint32 timeout = 2;
+}
+
+message ConfiguredInferModel_SetSchedulerTimeout_Reply {}
+
+message ConfiguredInferModel_SetSchedulerThreshold_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    uint32 threshold = 2;
+}
+
+message ConfiguredInferModel_SetSchedulerThreshold_Reply {}
+
+message ConfiguredInferModel_SetSchedulerPriority_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    uint32 priority = 2;
+}
+
+message ConfiguredInferModel_SetSchedulerPriority_Reply {}
+
+message ConfiguredInferModel_GetHwLatencyMeasurement_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+}
+
+message ConfiguredInferModel_GetHwLatencyMeasurement_Reply {
+    uint32 avg_hw_latency = 1;
+}
+
+message ConfiguredInferModel_Activate_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+}
+
+message ConfiguredInferModel_Activate_Reply {}
+
+message ConfiguredInferModel_Deactivate_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+}
+
+message ConfiguredInferModel_Deactivate_Reply {}
+
+message ConfiguredInferModel_Shutdown_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+}
+
+message ConfiguredInferModel_Shutdown_Reply {}
+
+message ConfiguredInferModel_UpdateCacheOffset_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    int32 offset_delta_entries = 2;
+}
+
+message ConfiguredInferModel_UpdateCacheOffset_Reply {}
+
+message ConfiguredInferModel_InitCache_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    uint32 read_offset = 2;
+}
+
+message ConfiguredInferModel_InitCache_Reply {}
+
+message ConfiguredInferModel_FinalizeCache_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+}
+
+message ConfiguredInferModel_FinalizeCache_Reply {}
+
+message ConfiguredInferModel_GetCacheBuffers_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+}
+
+message CacheBuffer {
+    int32 id = 1;
+    bytes data = 2;
+}
+
+message ConfiguredInferModel_GetCacheBuffers_Reply {
+    repeated CacheBuffer buffers = 1;
+}
+
+message ConfiguredInferModel_UpdateCacheBuffer_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    CacheBuffer buffer = 2;
+}
+
+message ConfiguredInferModel_UpdateCacheBuffer_Reply {}
+
+message BufferInfo {
+    uint32 size = 1;
+    uint32 type = 2;
+}
+
+message ConfiguredInferModel_AsyncInfer_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    HailoObjectHandle infer_model_handle = 2;
+    repeated BufferInfo buffer_infos = 3; // Represents both inputs and outputs
+    // Protocol note: After this message, server expects to get the input buffers, one after the other, in order
+}
+
+message ConfiguredInferModel_AsyncInfer_Reply {}
+
+message ConfiguredInferModel_RunAsyncForDuration_Request {
+    HailoObjectHandle configured_infer_model_handle = 1;
+    HailoObjectHandle infer_model_handle = 2;
+    uint32 duration_ms = 3;
+    uint32 sleep_between_frames_ms = 4;
+    repeated BufferInfo io_buffer_infos = 5; // Represents both inputs and outputs
+    // Protocol note: After this message, server expects to get the input buffers, one after the other, in order
+}
+
+message ConfiguredInferModel_RunAsyncForDuration_Reply {
+    uint32 fps = 1;
+    // Protocol note: After this message, client expects to get the output buffers, one after the other, in order
+}
+
+message CallbackCalled_Reply {
+    HailoCallbackHandle callback_handle = 1;
+    oneof callback_type {
+        RunAsyncCallback run_async = 2;
+        DeviceNotificationCallback device_notification = 3;
+    }
+}
+
+message RunAsyncCallback {
+    uint32 status = 1;
+    // Protocol note: After this message, and only if status is HAILO_SUCCESS, client expects to get the output buffers, one after the other, in order
+}
+
+message HealthMonitorTemperatureAlarmNotification {
+    uint32 temperature_zone = 1;
+    uint32 alarm_ts_id = 2;
+    float ts0_temperature = 3;
+    float ts1_temperature = 4;
+}
+
+message HealthMonitorOverCurrentAlertNotification {
+    uint32 overcurrent_zone = 1;
+    float exceeded_alert_threshold = 2;
+    bool is_last_overcurrent_violation_reached = 3;
+}
+
+message ThrottlingStateChangeNotification {
+    uint32 state  = 1;
+}
+
+message DeviceNotificationCallback {
+    uint32 notification_id = 1;
+    uint32 sequence = 2;
+    oneof message {
+        HealthMonitorTemperatureAlarmNotification health_monitor_temperature_alarm = 3;
+        HealthMonitorOverCurrentAlertNotification health_monitor_overcurrent_alert = 4;
+        ThrottlingStateChangeNotification throttling_state_change = 5;
+    }
+}
+
+message Device_Create_Request {
+}
+
+message Device_Create_Reply {
+    HailoObjectHandle device_handle = 1;
+}
+
+message Device_Destroy_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+message Device_Destroy_Reply {}
+
+message Device_Identify_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+// Added "_value" to the names so that the symbols will not clash with the macros defined in <sys/types.h>
+message FirmwareVersionProto {
+    uint32 major_value = 1;
+    uint32 minor_value = 2;
+    uint32 revision_value = 3;
+}
+
+enum DeviceArchitectureProto {
+    HAILO8_A0 = 0;
+    HAILO8 = 1;
+    HAILO8L = 2;
+    HAILO15H = 3;
+    HAILO15L = 4;
+    HAILO15M = 5;
+    HAILO10H = 6;
+}
+
+message DeviceIdentityProto {
+    uint32 protocol_version = 1;
+    FirmwareVersionProto fw_version = 2;
+    uint32 logger_version = 3;
+    string board_name = 4;
+    bool is_release = 5;
+    bool extended_context_switch_buffer = 6;
+    DeviceArchitectureProto device_architecture = 7;
+    repeated uint32 serial_number = 8;
+    repeated uint32 part_number = 9;
+    string product_name = 10;
+    bool extended_fw_check = 11;
+}
+
+message Device_Identify_Reply {
+    DeviceIdentityProto identity = 1;
+}
+
+message Device_ExtendedInfo_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+message DeviceSupportedFeaturesProto {
+    bool ethernet = 1;
+    bool mipi = 2;
+    bool pcie = 3;
+    bool current_monitoring = 4;
+    bool mdio = 5;
+    bool power_measurement = 6;
+}
+
+enum DeviceBootSourceProto {
+    BOOT_SOURCE_INVALID = 0;
+    BOOT_SOURCE_PCIE = 1;
+    BOOT_SOURCE_FLASH = 2;
+    BOOT_SOURCE_MAX = 3;
+}
+
+message Device_ExtendedInfo_Reply {
+    uint32 neural_network_core_clock_rate = 1;
+    DeviceSupportedFeaturesProto supported_features = 2;
+    DeviceBootSourceProto boot_source = 3;
+    repeated uint32 soc_id = 4;
+    uint32 lcs = 5;
+    repeated uint32 eth_mac_address = 6;
+    repeated uint32 unit_level_tracking_id = 7;
+    repeated uint32 soc_pm_values = 8;
+    uint32 gpio_mask = 9;
+    repeated uint32 chip_serial_number = 10;
+}
+
+message Device_GetChipTemperature_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+message Device_GetChipTemperature_Reply {
+    float ts0_temperature = 1;
+    float ts1_temperature = 2;
+    uint32 sample_count = 3;
+}
+
+message Device_QueryHealthStats_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+message Device_QueryHealthStats_Reply {
+    float on_die_temperature = 1;
+    int32 on_die_voltage = 2;
+    int32 bist_failure_mask = 3;
+}
+
+message Device_QueryPerformanceStats_Request {
+    HailoObjectHandle device_handle = 1;
+    uint32 sampling_period_ms = 2;
+}
+
+message Device_QueryPerformanceStats_Reply {
+    float cpu_utilization = 1;
+    int64 ram_size_total = 2;
+    int64 ram_size_used = 3;
+    float nnc_utilization = 4;
+    int32 ddr_noc_total_transactions = 5;
+    int32 dsp_utilization = 6;
+}
+
+message Device_PowerMeasurement_Request {
+    HailoObjectHandle device_handle = 1;
+    uint32 hailo_dvm_options = 2; /* corresponds to hailo_dvm_options_t */
+    uint32 hailo_power_measurement_type = 3; /* corresponds to hailo_power_measurement_type_t */
+}
+
+message Device_PowerMeasurement_Reply {
+    float power = 1;
+}
+
+message Device_SetPowerMeasurement_Request {
+    HailoObjectHandle device_handle = 1;
+    uint32 hailo_dvm_options = 2; /* corresponds to hailo_dvm_options_t */
+    uint32 hailo_power_measurement_type = 3; /* corresponds to hailo_power_measurement_type_t */
+}
+
+message Device_SetPowerMeasurement_Reply {}
+
+message Device_StartPowerMeasurement_Request {
+    HailoObjectHandle device_handle = 1;
+    uint32 averaging_factor = 2; /* corresponds to hailo_averaging_factor_t */
+    uint32 sampling_period = 3; /* corresponds to hailo_sampling_period_t */
+}
+
+message Device_StartPowerMeasurement_Reply {}
+
+message Device_GetPowerMeasurement_Request {
+    HailoObjectHandle device_handle = 1;
+    bool should_clear = 2;
+}
+
+message HailoPowerMeasurementData {
+    float average_value = 1;
+    float average_time_value_milliseconds = 2;
+    float min_value = 3;
+    float max_value = 4;
+    uint32 total_number_of_samples = 5;
+}
+
+message Device_GetPowerMeasurement_Reply {
+    HailoPowerMeasurementData data = 1;
+}
+
+message Device_StopPowerMeasurement_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+message Device_StopPowerMeasurement_Reply {}
+
+message Device_GetArchitecture_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+message Device_GetArchitecture_Reply {
+    uint32 device_architecture = 1;
+}
+
+message Device_SetNotificationCallback_Request {
+    HailoObjectHandle device_handle = 1;
+    uint32 notification_id = 2;
+    HailoCallbackHandle callback = 3;
+}
+
+message Device_SetNotificationCallback_Reply {}
+
+message Device_RemoveNotificationCallback_Request {
+    HailoObjectHandle device_handle = 1;
+    uint32 notification_id = 2;
+}
+
+message Device_RemoveNotificationCallback_Reply {}
+
+message Device_FetchLogs_Request {
+    HailoObjectHandle device_handle = 1;
+    uint32 buffer_size = 2;
+    uint32 log_type = 3;
+    bool should_clear = 4;
+}
+
+message Device_FetchLogs_Reply {
+    uint32 log_size = 1;
+}
+
+message Device_EchoBuffer_Request {
+    uint32 buffer_size = 1;
+    // Protocol note: After this message, server expects to get the buffer
+}
+
+message Device_EchoBuffer_Reply {
+    // Protocol note: After this message, and only if status is HAILO_SUCCESS, client expects to get the buffer
+}
+
+message Device_GetCurrentLimit_Request {
+    HailoObjectHandle device_handle = 1;
+}
+
+message Device_GetCurrentLimit_Reply {
+    uint32 current_limit_mA = 1;
+}
