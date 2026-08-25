@@ -1,0 +1,14 @@
+{
+  "repo": "hailo",
+  "feeds": [
+    {
+      "source": "https://community.hailo.ai/",
+      "feed_url": "https://community.hailo.ai/posts.rss",
+      "title": "",
+      "saved": 11,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 11,
+  "fetched": "2026-08-22T20:20:02Z"
+}
