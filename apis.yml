@@ -13,6 +13,18 @@ description: >-
   the HEF model-file format, and a WebSocket/ZMQ analytics metadata scheme. Hailo also publishes a
   first-party Agent Skills package (hailo15-agentic-coding) of twelve skills that drive board connection,
   pipeline editing, model swapping, cross-compilation and deployment on the Hailo-15 SBC.
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - pricing
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 image: https://avatars.githubusercontent.com/u/83159046?v=4
 url: https://raw.githubusercontent.com/api-evangelist/hailo/refs/heads/main/apis.yml
 x-type: company
