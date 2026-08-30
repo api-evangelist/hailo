@@ -34,6 +34,19 @@ created: '2026-08-22'
 modified: '2026-08-22'
 tags:
 - Artificial Intelligence
+- Machine-Learning
+- Semiconductors
+- Edge Computing
+- Computer-Vision
+- Inference
+- Embedded Systems
+- Video Analytics
+- Hardware
+- Generative AI
+- Protocol Buffers
+- gRPC
+tags_raw:
+- Artificial Intelligence
 - Machine Learning
 - Semiconductors
 - Edge Computing
@@ -106,6 +119,11 @@ apis:
     reached over a local socket, with a Unix-domain-socket side-channel for DMA buffer descriptors. There
     is no public internet host; inventing one would be a fabrication.
   tags:
+  - Computer-Vision
+  - Video Analytics
+  - gRPC
+  - Streaming
+  tags_raw:
   - Computer Vision
   - Video Analytics
   - gRPC

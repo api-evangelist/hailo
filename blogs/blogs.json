@@ -2,13 +2,20 @@
   "repo": "hailo",
   "feeds": [
     {
+      "source": "https://community.hailo.ai/posts.rss",
+      "feed_url": "https://community.hailo.ai/posts.rss",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://community.hailo.ai/",
       "feed_url": "https://community.hailo.ai/posts.rss",
       "title": "",
-      "saved": 11,
+      "saved": 0,
       "method": "discovered"
     }
   ],
-  "post_count": 11,
-  "fetched": "2026-08-22T20:20:02Z"
+  "post_count": 23,
+  "fetched": "2026-08-30T22:33:40Z"
 }
