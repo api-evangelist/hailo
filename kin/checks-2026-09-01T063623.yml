@@ -1,16 +1,16 @@
 ---
 kin_checks:
   slug: hailo
-  schema_version: 0.16.0
-  scored_at: '2026-08-29'
-  run_ts: 2026-08-29T230545
+  schema_version: 0.17.2
+  scored_at: '2026-09-01'
+  run_ts: 2026-09-01T063623
   note: Actionable checks only (missed + partial). earned/na are every other check
-    in rubric/scoring-0.16.0.yml; counts below let you verify that.
+    in rubric/scoring-0.17.2.yml; counts below let you verify that.
   counts:
     total: 130
-    earned: 25
+    earned: 27
     partial: 5
-    missed: 58
+    missed: 56
     na: 42
   checks:
   - id: multiple_apis
@@ -22,8 +22,6 @@ kin_checks:
   - id: llms_txt_published
     status: missed
   - id: apis_json_self_hosted
-    status: missed
-  - id: contract_present
     status: missed
   - id: servers_resolvable
     status: missed
@@ -98,8 +96,6 @@ kin_checks:
   - id: reg_vulnerability_disclosure
     status: missed
   - id: reg_compliance_published
-    status: missed
-  - id: spec_presence
     status: missed
   - id: agentic_access
     status: missed
