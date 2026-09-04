@@ -25,6 +25,20 @@ deliveryModel:
   - repository-unlicensed
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: approval
+  trial: false
+  try_now: false
+  public: false
+  label: Requires approval
+  confidence: low
+  source:
+  - plans
+  - authentication
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://avatars.githubusercontent.com/u/83159046?v=4
 url: https://raw.githubusercontent.com/api-evangelist/hailo/refs/heads/main/apis.yml
 x-type: company
