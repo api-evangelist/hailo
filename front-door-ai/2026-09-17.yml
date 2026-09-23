@@ -1,0 +1,36 @@
+# Front Door AI Index — hailo — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: hailo
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: hailo.ai
+  final_host: hailo.ai
+  ownership: own
+  owner: hailo
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 102
+  host_score: 102
+  density: 83.13
+  words: 1227
+  tiers:
+    agentic: 3
+    core: 97
+    model: 2
+  ambiguous: 17
+  top_terms:
+    AI: 79
+    generative ai: 9
+    smart: 7
+    automation: 4
+    gen ai: 4
+    intelligence: 4
+    deep learning: 2
+    inference: 2
+    Claude: 1
+    LLMs: 1
+    agent: 1
+    agentic: 1
