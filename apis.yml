@@ -13,16 +13,20 @@ description: 'Hailo Technologies Ltd. is an Israeli fabless semiconductor compan
   Agent Skills package (hailo15-agentic-coding) of twelve skills that drive board connection, pipeline
   editing, model swapping, cross-compilation and deployment on the Hailo-15 SBC.'
 deliveryModel:
-  model: unknown
+  model: saas
+  license_evidence:
+    not_product:
+    - hailo-ai/hailo-media-library
+    - hailo-ai/hailort
   open_source: unknown
   commercial: true
   callable_host: false
-  label: Delivery model not determined — needs a product licence on record
+  label: Hosted service · you call their endpoint
   confidence: low
   source:
   - pricing
-  - repository-unlicensed
-  generated: '2026-08-28'
+  - repository-not-product
+  generated: '2026-09-25'
   method: derived
 accessModel:
   pricing: unknown
@@ -45,12 +49,15 @@ x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-08-22'
 modified: '2026-08-22'
+x-docs-platform: sphinx
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
 tags:
 - Artificial Intelligence
-- Machine-Learning
+- Machine Learning
 - Semiconductors
 - Edge Computing
-- Computer-Vision
+- Computer Vision
 - Inference
 - Embedded Systems
 - Video Analytics
@@ -71,6 +78,8 @@ tags_raw:
 - Generative AI
 - Protocol Buffers
 - gRPC
+- Machine-Learning
+- Computer-Vision
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -129,7 +138,7 @@ apis:
     board and is reached over a local socket, with a Unix-domain-socket side-channel for DMA buffer descriptors.
     There is no public internet host; inventing one would be a fabrication.
   tags:
-  - Computer-Vision
+  - Computer Vision
   - Video Analytics
   - gRPC
   - Streaming
@@ -138,6 +147,7 @@ apis:
   - Video Analytics
   - gRPC
   - Streaming
+  - Computer-Vision
   properties:
   - type: Protobuf
     url: grpc/hailo-media-library-service.proto
