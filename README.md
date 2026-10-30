@@ -64,35 +64,104 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Hailo Technologies Ltd. is an Israeli fabless semiconductor company, headquartered in Tel Aviv, that
-designs AI inference accelerators (Hailo-8, Hailo-8L, Hailo-10) and AI vision processors (the Hailo-15
-SoC family) for edge devices.
+Hailo Technologies Ltd. is an Israeli fabless semiconductor company, headquartered in Tel Aviv with offices in the United States, Germany, Japan, Taiwan, China and South Korea, that designs AI inference accelerators (the Hailo-8, Hailo-8L and Hailo-10 families) and AI vision processors (the Hailo-15 SoC family) for edge devices. Its developer surface is not a hosted web API: it is an on-device software stack published largely on GitHub under the hailo-ai organization — HailoRT, a C/C++/Python runtime library plus the hailortcli command line tool and a PCIe kernel driver; the Hailo Model Zoo of pre-compiled HEF models; TAPPAS and hailo-apps application pipelines; and the Hailo Media Library and Hailo Imaging stacks for the Hailo-15 vision processor. The machine-readable contracts Hailo publishes are Protocol Buffers — a 33-RPC gRPC MediaLibraryService, the HailoRT hRPC and GenAI message schemes, the HEF model-file format, and a WebSocket/ZMQ analytics metadata scheme. Hailo also publishes a first-party Agent Skills package (hailo15-agentic-coding) of twelve skills that drive board connection, pipeline editing, model swapping, cross-compilation and deployment on the Hailo-15 SBC.
 
-**Hailo publishes no hosted web API.** There is no REST or GraphQL endpoint, no MCP server, no API key
-and no base URL. What Hailo publishes is on-device software, almost all of it public on GitHub under the
-verified `hailo-ai` organization, and this profile records that surface as it actually is.
+**Areas:** Artificial Intelligence · Machine Learning · Semiconductors · Edge Computing · Computer Vision · Inference · Embedded Systems · Video Analytics · Hardware · Generative AI · Protocol Buffers · gRPC
 
-What was found on 2026-08-22:
+## Hailo on APIs.io
 
-- **Seven Protocol Buffers contracts**, saved verbatim in `grpc/`. The strongest is
-  `hailo-media-library-service.proto` — a real gRPC `service MediaLibraryService` with 33 RPCs, five of
-  them server-streaming. Also the HailoRT hRPC and GenAI schemes, the HEF model-file format, the
-  analytics metadata scheme, and two telemetry schemes.
-- **Twelve first-party Agent Skills**, saved verbatim in `skills/` from
-  [`hailo-ai/hailo15-agentic-coding`](https://github.com/hailo-ai/hailo15-agentic-coding) — Hailo's own
-  packaged skills for connecting to a Hailo-15 SBC, editing pipelines, swapping models,
-  cross-compiling and deploying. API Evangelist authored none of them.
-- **`hailortcli`**, Hailo's first-party CLI, with its command surface read from the source.
-- **No package on any public registry** — npm, PyPI, RubyGems, crates.io, NuGet, Maven Central and
-  pkg.go.dev were all queried and returned nothing first-party. Distribution is GitHub releases plus
-  registration-gated downloads on the Developer Zone.
+Everything profiled for Hailo is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/hailo/](https://apis.io/providers/hailo/)** — or go straight to one of the APIs or properties below.
 
-`hailo.ai` sits behind a Cloudflare bot challenge that returns HTTP 403 to non-browser clients, so the
-Developer Zone documentation could not be read directly; everything above comes from sources that were
-actually reachable.
+### APIs (2)
 
-Sources:
-- https://hailo.ai/
-- https://github.com/hailo-ai
-- https://community.hailo.ai/
-- https://www.hiive.com/securities/hailo-stock (secondary-market listing that surfaced this company; not Hailo's own site)
+- [HailoRT](https://apis.io/apis/hailo/hailo-hailort/) — HailoRT is Hailo's production runtime library for the Hailo-8, Hailo-10 and Hailo-15 device families. It is a host-side, user-space C/C++ library with a…
+- [Hailo Media Library Service](https://apis.io/apis/hailo/hailo-media-library/) — The Hailo Media Library is the C++ media and vision stack for the Hailo-15 AI vision processor. It exposes a real gRPC contract — service…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Hailo Authentication](https://apis.io/security/hailo/hailo-authentication/)
+- [Hailo Domain Security](https://apis.io/security/hailo/hailo-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Hailo Plans Pricing](https://apis.io/plans/hailo/hailo-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Hailo Rate Limits](https://apis.io/rate-limits/hailo/hailo-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://hailo.ai/)
+- [Documentation](https://hailo.ai/developer-zone/documentation/)
+- [API reference](https://hailo.ai/developer-zone/documentation/hailort/latest/)
+- [Support](https://community.hailo.ai/)
+- [Blog](https://hailo.ai/blog/)
+- [Terms of service](https://hailo.ai/terms-and-conditions/website-terms-of-use/)
+- [Privacy policy](https://hailo.ai/terms-and-conditions/privacy-policy/)
+- [GitHub](https://github.com/hailo-ai)
+
+## API Evangelist rating
+
+**Kin Score 32.9** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 57.1 |
+| Contract quality | 24.0 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 66.7 |
+| Access clarity | 21.1 |
+
+**Agent readiness 20.4** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.7** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/hailo/](https://apis.io/providers/hailo/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Hailo: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/hailo/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
